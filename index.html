@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="en" dir="ltr">
+  <head>
+    <meta charset="utf-8">
+    <title>Board Game</title>
+    <link rel="stylesheet" href="css/style.css" type="text/css">
+  </head>
+  <body>
+    <h1>Board Game</h1>
+
+    <!-- display board -->
+    <button type="button" name="button" id="playGame">Play the game</button>
+    <div id="table">
+
+    </div>
+
+    <!-- Player information -->
+    <div class="display inline">
+      <div class="player-container active" id="player1">
+        <h2>Player 1</h2>
+        <div class="player-info">
+          <h3>Health: <span class="life-value"></span></h3>
+          <h3>Weapon Damage: <span class="weapon-value"></span></h3>
+          <h3>Current weapon: <span class="weapon"></span> </h3>
+        </div>
+        <div class="move">
+          <button type="button" name="button" class="attack">ATTACK</button>
+          <button type="button" name="button">DEFEND</button>
+        </div>
+      </div>
+
+      <div class="player-container" id="player2">
+        <h2>Player 2</h2>
+        <div class="player-info">
+          <h3>Health: <span class="life-value"></span></h3>
+          <h3>Current weapon: <span class="weapon"></span> </h3>
+          <h3>Weapon Damage: <span class="weapon-value"></span> </h3>
+        </div>
+        <div class="move">
+          <button type="button" name="button" class="attack">ATTACK</button>
+          <button type="button" name="button">DEFEND</button>
+        </div>
+      </div>
+    </div>
+
+
+    <div class="inline" id="map">
+
+    </div>
+
+    <br class="clearBoth">
+
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript" src="js/map.js">
+    </script>
+  </body>
+</html>

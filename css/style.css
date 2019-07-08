@@ -1,0 +1,32 @@
+.div{
+  width: 50px;
+  height: 50px;
+  display: inline-block;
+  border: 1px solid black;
+}
+
+.black{
+  background-color: black;
+}
+
+
+#map{
+  display: flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  width:500px;
+  height: auto;
+  margin-right: 50px;
+}
+
+.display{
+  display: none;
+}
+
+div.inline {
+  float:right;
+}
+
+.clearBoth{
+  clear:both
+}
