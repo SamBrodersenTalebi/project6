@@ -23,6 +23,7 @@ class Board{
     return model;
   }
 
+//NEED TO APPEND TO DIVS TO TD!!!
   _createView(){
     let tableElem = $('<table>');
 
@@ -72,6 +73,19 @@ class Board{
         // if random td is not blocked set it to blocked and increment i by 1.
         randomsquare.blocked = true;
         i++;
+      }
+    }
+  }
+
+  weaponsquares(){
+    let weapons = ['Axe', 'Sword', 'Knife', 'Spear', 'Bow'];
+
+    while(weapons.length > 0){
+      //Grab one random cell
+      let randomsquare = this.getRandomSquare();
+      // If the randomsquare has an instance property of weapon set to an empty string then run the code
+      if(randomsquare.weapon == ''){
+        randomsquare.weapon = weapons.pop();
       }
     }
   }

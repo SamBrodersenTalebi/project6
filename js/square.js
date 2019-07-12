@@ -2,20 +2,21 @@
 class Square {
   constructor(id){
     this.id = id;
-    this.blocked = false;
+    this._blocked = false;
     this.player = null;
-    this.weapon = none;
+    this._weapon = '';
   }
-  
+
   // ------------------------------------------------------------------------
   // GETTER AND SETTER
   // ------------------------------------------------------------------------
 
+  // Getter is called when trying to read a property
   get blocked(){
     return this._blocked;
   }
 
-  //Setter takes the argument from the getter function
+  //Setter is called when trying to update a property
   set blocked(boolean){
     //Update model
     this._blocked = boolean;
@@ -25,6 +26,22 @@ class Square {
       $(td).addClass('blocked');
     } else{
       $(td).removeClass('blocked');
+    }
+  }
+
+  get weapon(){
+    return this._weapon;
+  }
+
+  set weapon(string){
+    //Update Model
+    this._weapon = string;
+    //Update View
+    let td = $('#'+this.id);
+    if(string.length > 0){
+      $(td).addClass('weapon').children()[1].html(string);
+    } else{
+      $(td).removeClass('weapon')children()[1].html('');
     }
   }
 
