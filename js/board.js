@@ -78,7 +78,7 @@ class Board{
   }
 
   weaponsquares(){
-    let weapons = ['Axe', 'Sword', 'Knife', 'Spear', 'Bow'];
+    let weapons = ['Axe', 'Sword', 'Knife', 'Spear'];
 
     while(weapons.length > 0){
       //Grab one random cell
@@ -90,4 +90,16 @@ class Board{
     }
   }
 
+  addPlayer(){
+    let players = [p1,p2]
+    let p1 = new Player('Sam', true);
+    let p2 = new Player('Jeff', false)
+    while(players.length > 0){
+      let randomsquare = this.getRandomSquare();
+      if(randomsquare.blocked == false && randomsquare.weapon == ''){
+        randomsquare.setPlayer(p);
+        players.pop();
+      }
+    }
+  }
 }

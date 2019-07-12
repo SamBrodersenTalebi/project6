@@ -3,7 +3,7 @@ class Square {
   constructor(id){
     this.id = id;
     this._blocked = false;
-    this.player = null;
+    this._player = null;
     this._weapon = '';
   }
 
@@ -43,6 +43,14 @@ class Square {
     } else{
       $(td).removeClass('weapon')children()[1].html('');
     }
+  }
+
+  get player(){
+    return this._player
+  }
+
+  set player(){
+    
   }
 
   get location(){
