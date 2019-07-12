@@ -3,7 +3,7 @@ class Board{
   constructor(size){
     this.size = size;
     this.board = this._createModel(); //array that contains all square instances for all cells
-    this.elem = this._createView(); //html elem 
+    this.elem = this._createView(); //html elem
   }
   // ------------------------------------------------------------------------
   // Model and View methods
@@ -39,4 +39,41 @@ class Board{
     }
     return tableElem;
   }
+
+  // ------------------------------------------------------------------------
+  // Squares
+  // ------------------------------------------------------------------------
+  getSquareWithPlayer(){
+
+  }
+
+  getRandomSquare(){
+    let row = Math.floor(Math.random()*this.size);
+    let column = Math.floor(Math.random()*this.size);
+    return this.board[row][column];
+  }
+
+  //gets a specific square
+  getSquare(row, column){
+    return this.board[row][column]
+  }
+
+  // ------------------------------------------------------------------------
+  // add blocked, weapons squares and player
+  // ------------------------------------------------------------------------
+
+  blockedsquares(){
+    let i = 0;
+    // while there is less than five td's that has the class of blocked then run the code
+    while (i < 5){
+      let randomsquare = this.getRandomSquare();
+      //Grabs one random table cell and check if it is blocked
+      if(randomsquare.blocked == false){
+        // if random td is not blocked set it to blocked and increment i by 1.
+        randomsquare.blocked = true;
+        i++;
+      }
+    }
+  }
+
 }
