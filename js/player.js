@@ -1,8 +1,8 @@
 
 class Player{
-  constructor(name, booolean){
+  constructor(name, boolean){
     this._name = name;
-    this._active = boolean
+    this._active = boolean;
     this.life = 100;
     this.damage = 10;
     this.elem = this.createView()
@@ -18,7 +18,7 @@ class Player{
     return this._active
   }
 
-  set active(){
-
+  set active(boolean){
+    this._active = boolean; 
   }
 }

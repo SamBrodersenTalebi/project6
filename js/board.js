@@ -1,7 +1,6 @@
 
 class Board{
   constructor(size){
-    $('#tableDiv').on('keypress', movePlayer);
     this.size = size;
     this.board = this._createModel(); //array that contains all square instances for all cells
     this.elem = this._createView(); //html elem
@@ -110,10 +109,22 @@ class Board{
   }
 
   // ------------------------------------------------------------------------
-  // EVENT 
+  // EVENT
   // ------------------------------------------------------------------------
   movePlayer(event){
+    // CAN ONLY MOVE IF PLAYER IS ACTIVE
+    // Get player object and check if it is active.
+    if()
+    //on hover shows the possible moves
+    $('#table').hover(function(){
+      // check horizontal moves
+      //NEED TO TAKE OBSTRACLES INTO ACCOUNT!
+      //check vertical moves
+    })
 
+    $('#table').on('click', function(){
+      // NEED TO CHANGE THE INSTANCE PROPERTY OF THE PLAYER BY CALLING THE SETTER!
+    })
   }
 
 }
