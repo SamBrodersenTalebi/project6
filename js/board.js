@@ -1,6 +1,7 @@
 
 class Board{
   constructor(size){
+    $('#tableDiv').on('keypress', movePlayer);
     this.size = size;
     this.board = this._createModel(); //array that contains all square instances for all cells
     this.elem = this._createView(); //html elem
@@ -34,7 +35,10 @@ class Board{
       for (let column = 0; column < this.size; column++){
         let id = `${row},${column}`;
         //append <td> to <tr> and add id to each cell
-        $('<tr>').attr('id',id).appendTo(trElem);
+        let tdElem = $('<td>').attr('id',id).appendTo(trElem);
+        for (let i = 0; i < 3; i++){
+          $('<div>').appendTo(tdElem);
+        }
       }
       $(tableElem).append(trElem);
     }
@@ -45,7 +49,9 @@ class Board{
   // Squares
   // ------------------------------------------------------------------------
   getSquareWithPlayer(){
-
+    let location = Square.GetPlayerLocation();
+    //return player from model array
+    return this.board[location.row][location.column]
   }
 
   getRandomSquare(){
@@ -78,28 +84,36 @@ class Board{
   }
 
   weaponsquares(){
-    let weapons = ['Axe', 'Sword', 'Knife', 'Spear'];
+    //Create weapon object and insert them into a randomsquare.
+    let weapons = [new Weapon('Axe', 25), new Weapon('Sword', 20), new Weapon('Knife', 15), new Weapon('Spear', 20)];
 
     while(weapons.length > 0){
       //Grab one random cell
       let randomsquare = this.getRandomSquare();
       // If the randomsquare has an instance property of weapon set to an empty string then run the code
-      if(randomsquare.weapon == ''){
-        randomsquare.weapon = weapons.pop();
+      if(randomsquare.weapon == null && randomsquare.blocked == false){
+        randomsquare.setWeapon(weapon);
       }
     }
   }
 
   addPlayer(){
-    let players = [p1,p2]
     let p1 = new Player('Sam', true);
-    let p2 = new Player('Jeff', false)
+    let p2 = new Player('Jeff', false);
+    let players = [p1,p2]
     while(players.length > 0){
       let randomsquare = this.getRandomSquare();
-      if(randomsquare.blocked == false && randomsquare.weapon == ''){
-        randomsquare.setPlayer(p);
-        players.pop();
+      if(randomsquare.blocked == false && randomsquare.weapon == null && randomsquare.player = null){
+        randomsquare.setPlayer(players.pop());
       }
     }
   }
+
+  // ------------------------------------------------------------------------
+  // EVENT 
+  // ------------------------------------------------------------------------
+  movePlayer(event){
+
+  }
+
 }

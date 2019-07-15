@@ -1,10 +1,22 @@
+import { Player } from './player.js'
+import { Weapon } from './weapon.js'
 
-class Square {
+export class Square {
+  static GetPlayerLocation(){
+      //get the id of the td with the player inside
+      let tdId =  $('#player').parent().attr('id');
+      //use number method to turn string into number
+      let r = Number( tdId[0]);
+      let c = Number( tdId[2] );
+      //return the row and column
+      return { row: r, column: c};
+  }
+
   constructor(id){
     this.id = id;
     this._blocked = false;
     this._player = null;
-    this._weapon = '';
+    this._weapon = null;
   }
 
   // ------------------------------------------------------------------------
@@ -28,7 +40,7 @@ class Square {
       $(td).removeClass('blocked');
     }
   }
-
+/*
   get weapon(){
     return this._weapon;
   }
@@ -44,23 +56,48 @@ class Square {
       $(td).removeClass('weapon')children()[1].html('');
     }
   }
+*/
+  setWeapon(weapon){
+    //Update model
+    this._weapon = weapon;
 
-  get player(){
-    return this._player
+    //Update View
+    let td = $('#'+this.id);
+    $(td).children()[1].replaceWith(weapon.element)
+
   }
 
-  set player(){
-    
+  removeWeapon(){
+    //Update Model
+    let weapon = this._weapon;
+    this._weapon = null;
+
+    //update View
+    let td = $('#'+this.id);
+    $(td).children()[1].replaceWith('div');
+
+    //If a player moves into a tile with a weapon the instance property of damage needs to be updated
+    //!!!!
   }
 
-  get location(){
-    let tdId =  $('#player').parent().attr('id');
-    //use number method to turn string into number
-    let r = Number( tdId[0]);
-    let c = Number( tdId[2] );
+  setPlayer(p){
+    //Update model
+    this._player = p;
 
-    let location = {row:r, column: c};
+    //Update view
+    let td = $('#'+this.id);
+    $(td).children()[0].replaceWith(p.elem);
 
-    return location;
+  }
+
+  removePlayer(){
+    //select player and update Model
+    let p = this._player;
+    this._player = null;
+
+    //update View
+    let td = $('#'+this.id);
+    $(td).children()[0].replaceWith('div');
+
   }
 }
