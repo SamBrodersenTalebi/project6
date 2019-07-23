@@ -47,8 +47,8 @@ class Board{
   // ------------------------------------------------------------------------
   // Squares
   // ------------------------------------------------------------------------
-  getSquareWithPlayer(){
-    let location = Square.GetPlayerLocation();
+  getSquareWithPlayer(player){
+    let location = Square.GetPlayerLocation(player);
     //return player from model array
     return this.board[location.row][location.column]
   }
