@@ -100,4 +100,5 @@ export class Square {
     $(td).children()[0].replaceWith('div');
 
   }
+
 }

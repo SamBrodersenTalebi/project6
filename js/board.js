@@ -111,10 +111,12 @@ class Board{
 
   addPlayer(){
     //FIX LOOP
-    while(this.players.length > 0){
+    let i = 0
+    while(i <= 1){
       let randomsquare = this.getRandomSquare();
       if(randomsquare.blocked == false && randomsquare.weapon == null && randomsquare.player == null){
-        randomsquare.setPlayer(players.pop());
+        randomsquare.setPlayer(this.players[i]);
+        i++;
       }
     }
   }
@@ -122,39 +124,21 @@ class Board{
   // ------------------------------------------------------------------------
   // EVENT PART TWO
   // ------------------------------------------------------------------------
-  movePlayer(event){
-    //Determine valid squares and add click handler
+  movePlayer(){
+    //Find location of the active player
     let location = this.getSquareWithPlayer(true);
+    //store the squares that a player can move into in an array.
     let validSquares = this.findValidSquares(location);
-    let moves = [
-      //Up
-      [0,1], [0,2], [0,3],
-      //down
-      [0,-1], [0,-2], [0,-3],
-      //Left
-      [1,0], [2,0], [3,0],
-      //Right
-      [-1,0], [-2,0], [-3,0]
-    ];
-    // CAN ONLY MOVE IF PLAYER IS ACTIVE
-    if(player.active == true){
-      //on hover shows the possible moves
-      $('#table').hover(function(){
-        let cells = $('td');
-        //get the id of the hovered square
-        let sqHover = $(this).data('id');
-        // check horizontal moves
-        //NEED TO TAKE OBSTRACLES INTO ACCOUNT!
-        //check vertical moves
-      })
-
-      $('#table').on('click', function(){
-        let
-
-      })
+    //add class to the validSquares
+    this.highlight(validSquares);
+    //Listen for click event on the highlighted squares
+    $('.highlight').click(function(){
+      this.move(validSquares);
+      //remove class highlight to the validsquares
+      this.removeHighlight(validSquares);
+      //switch active player when the turn is done
       switchPlayer()
-
-    }
+    })
   }
 
   findValidSquares(location){
@@ -173,7 +157,6 @@ class Board{
       }
       else{
         validSquares.push(square);
-        i++;
       }
     }
     //Check right moves
@@ -188,7 +171,6 @@ class Board{
       }
       else{
         validSquares.push(square);
-        i++;
       }
     }
     //Check down moves
@@ -203,7 +185,6 @@ class Board{
       }
       else{
         validSquares.push(square);
-        j++;
       }
     }
     //Check up moves
@@ -218,10 +199,23 @@ class Board{
       }
       else{
         validSquares.push(square);
-        j++;
       }
     }
     return validSquares
+  }
+
+  highlight(array){
+    //add class highlight to objects within validSquares array
+    for(i = 0; i < array.length; i++){
+      array[i].id.addClass('highlight');
+    }
+  }
+
+  removeHighlight(array){
+    //add class highlight to objects within validSquares array
+    for(i = 0; i < array.length; i++){
+      array[i].id.removeClass('highlight');
+    }
   }
 
   switchPlayer(){
@@ -233,7 +227,11 @@ class Board{
     if(players[1].active == true){
       players[1].active = false;
       players[0].active = true;
-    } 
+    }
+  }
+
+  move(array){
+
   }
 
 }
