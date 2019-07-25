@@ -30,3 +30,8 @@ div.inline {
 .clearBoth{
   clear:both
 }
+
+td: hover{
+  color: #fff;
+  background-color: rgba(37,88,228,0.8);
+}

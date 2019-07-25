@@ -2,9 +2,9 @@ import { Player } from './player.js'
 import { Weapon } from './weapon.js'
 
 export class Square {
-  static GetPlayerLocation(player){
+  static GetPlayerLocation(name){
       //get the id of the td with the player inside
-      let tdId =  $('.player')[player].parent().attr('id');
+      let tdId =  $("#"+name).parent().attr('id');
       //use number method to turn string into number
       let r = Number( tdId[0]);
       let c = Number( tdId[2] );

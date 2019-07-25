@@ -1,13 +1,20 @@
-
 class Board{
   constructor(size){
     this.size = size;
     this.board = this._createModel(); //array that contains all square instances for all cells
+    this.players = this._createPlayers();
     this.elem = this._createView(); //html elem
   }
   // ------------------------------------------------------------------------
   // Model and View methods
   // ------------------------------------------------------------------------
+
+  _createPlayers(){
+    let p1 = new Player('Sam', true);
+    let p2 = new Player('Jeff', false);
+    let players = [p1,p2]
+    return players;
+  }
 
   _createModel(){
     let model = [];
@@ -35,7 +42,7 @@ class Board{
         let id = `${row},${column}`;
         //append <td> to <tr> and add id to each cell
         let tdElem = $('<td>').attr('id',id).appendTo(trElem);
-        for (let i = 0; i < 3; i++){
+        for (let i = 0; i < 2; i++){
           $('<div>').appendTo(tdElem);
         }
       }
@@ -47,10 +54,16 @@ class Board{
   // ------------------------------------------------------------------------
   // Squares
   // ------------------------------------------------------------------------
-  getSquareWithPlayer(player){
-    let location = Square.GetPlayerLocation(player);
+  getSquareWithPlayer(active){
+    //DELETE NAME ARGUMENT!
+    let player = this.players[0];
+    if(player.active !== active){
+      player = this.players[1];
+    }
+    let location = Square.GetPlayerLocation(player.name);
     //return player from model array
     return this.board[location.row][location.column]
+
   }
 
   getRandomSquare(){
@@ -91,40 +104,136 @@ class Board{
       let randomsquare = this.getRandomSquare();
       // If the randomsquare has an instance property of weapon set to an empty string then run the code
       if(randomsquare.weapon == null && randomsquare.blocked == false){
-        randomsquare.setWeapon(weapon);
+        randomsquare.setWeapon(weapons.pop());
       }
     }
   }
 
   addPlayer(){
-    let p1 = new Player('Sam', true);
-    let p2 = new Player('Jeff', false);
-    let players = [p1,p2]
-    while(players.length > 0){
+    //FIX LOOP
+    while(this.players.length > 0){
       let randomsquare = this.getRandomSquare();
-      if(randomsquare.blocked == false && randomsquare.weapon == null && randomsquare.player = null){
+      if(randomsquare.blocked == false && randomsquare.weapon == null && randomsquare.player == null){
         randomsquare.setPlayer(players.pop());
       }
     }
   }
 
   // ------------------------------------------------------------------------
-  // EVENT
+  // EVENT PART TWO
   // ------------------------------------------------------------------------
   movePlayer(event){
+    //Determine valid squares and add click handler
+    let location = this.getSquareWithPlayer(true);
+    let validSquares = this.findValidSquares(location);
+    let moves = [
+      //Up
+      [0,1], [0,2], [0,3],
+      //down
+      [0,-1], [0,-2], [0,-3],
+      //Left
+      [1,0], [2,0], [3,0],
+      //Right
+      [-1,0], [-2,0], [-3,0]
+    ];
     // CAN ONLY MOVE IF PLAYER IS ACTIVE
-    // Get player object and check if it is active.
-    if()
-    //on hover shows the possible moves
-    $('#table').hover(function(){
-      // check horizontal moves
-      //NEED TO TAKE OBSTRACLES INTO ACCOUNT!
-      //check vertical moves
-    })
+    if(player.active == true){
+      //on hover shows the possible moves
+      $('#table').hover(function(){
+        let cells = $('td');
+        //get the id of the hovered square
+        let sqHover = $(this).data('id');
+        // check horizontal moves
+        //NEED TO TAKE OBSTRACLES INTO ACCOUNT!
+        //check vertical moves
+      })
 
-    $('#table').on('click', function(){
-      // NEED TO CHANGE THE INSTANCE PROPERTY OF THE PLAYER BY CALLING THE SETTER!
-    })
+      $('#table').on('click', function(){
+        let
+
+      })
+      switchPlayer()
+
+    }
+  }
+
+  findValidSquares(location){
+    let validSquares = [];
+    let row = location.row;
+    let column = location.column;
+    //Check Left moves
+    for(i = 0; i < 3; i++){
+      let newRow = row + i;
+      let square = this.getSquare(newRow, column)
+      if (newRow < 1 || newRow > this.size){
+        break;
+      }
+      if(square.blocked == true || square.player !== null ){
+        break;
+      }
+      else{
+        validSquares.push(square);
+        i++;
+      }
+    }
+    //Check right moves
+    for(i = -3; i > 0; i++){
+      let newRow = row + i;
+      let square = this.getSquare(newRow, column)
+      if (newRow < 1 || newRow > this.size){
+        break;
+      }
+      if(square.blocked == true || square.player !== null ){
+        break;
+      }
+      else{
+        validSquares.push(square);
+        i++;
+      }
+    }
+    //Check down moves
+    for(j = 3; j < 0; j++){
+      let newColumn = column + i;
+      let square = this.getSquare(row, newColumn)
+      if (newColumn < 1 || newColumn > this.size){
+        break;
+      }
+      if(square.blocked == true || square.player !== null ){
+        break;
+      }
+      else{
+        validSquares.push(square);
+        j++;
+      }
+    }
+    //Check up moves
+    for(j = -3; j > 0; j++){
+      let newColumn = column + i;
+      let square = this.getSquare(row, newColumn)
+      if (newColumn < 1 || newColumn > this.size){
+        break;
+      }
+      if(square.blocked == true || square.player !== null ){
+        break;
+      }
+      else{
+        validSquares.push(square);
+        j++;
+      }
+    }
+    return validSquares
+  }
+
+  switchPlayer(){
+    // switches the active player
+    if(players[0].active == true){
+      players[0].active = false;
+      players[1].active = true;
+    }
+    if(players[1].active == true){
+      players[1].active = false;
+      players[0].active = true;
+    } 
   }
 
 }
