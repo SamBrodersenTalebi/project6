@@ -97,7 +97,7 @@ class Board{
 
   weaponsquares(){
     //Create weapon object and insert them into a randomsquare.
-    let weapons = [new Weapon('Axe', 25), new Weapon('Sword', 20), new Weapon('Knife', 15), new Weapon('Spear', 20)];
+    let weapons = [new Weapon('Axe', 30), new Weapon('Sword', 20), new Weapon('Knife', 20), new Weapon('Spear', 30)];
 
     while(weapons.length > 0){
       //Grab one random cell
@@ -207,14 +207,16 @@ class Board{
   highlight(array){
     //add class highlight to objects within validSquares array
     for(i = 0; i < array.length; i++){
-      array[i].id.addClass('highlight');
+      let td = array[i].id;
+      $('#'+td).addClass('highlight');
     }
   }
 
   removeHighlight(array){
     //add class highlight to objects within validSquares array
     for(i = 0; i < array.length; i++){
-      array[i].id.removeClass('highlight');
+      let td = array[i].id;
+      $('#'+td).removeClass('highlight');
     }
   }
 
@@ -231,7 +233,12 @@ class Board{
   }
 
   move(array){
+    //Need to return the clicked square
 
   }
+
+  // ------------------------------------------------------------------------
+  // FIGHT PART THREE
+  // ------------------------------------------------------------------------
 
 }
