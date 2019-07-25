@@ -132,8 +132,18 @@ class Board{
     //add class to the validSquares
     this.highlight(validSquares);
     //Listen for click event on the highlighted squares
-    $('.highlight').click(function(){
-      this.move(validSquares);
+    $('.highlight').click(function(e){
+      let xPosition = e.pageX;
+      let yPosition = e.pageY;
+      // retrieve elem from coordinates
+      let elem = document.elementFromPoint(xPosition, yPosition);
+      //access id of elem
+      let id = $(elem).attr('id');
+      //get the row and column number
+      let row = Number( id[0]);
+      let column = Number( id[2] );
+      //pass row and column to move function
+      this.move(row,column);
       //remove class highlight to the validsquares
       this.removeHighlight(validSquares);
       //switch active player when the turn is done
@@ -232,9 +242,16 @@ class Board{
     }
   }
 
-  move(array){
-    //Need to return the clicked square
-
+  move(row,column){
+    //get square with player
+    let playerSquare = this.getSquareWithPlayer(true);
+    //remove player from current square
+    let player = playerSquare.removePlayer();
+    // get the new square
+    let square = this.getSquare(row,column);
+    // insert player to the new square
+    square.setPlayer(player);
+    //If a player passes through a weapon it needs to update the weapon of the player
   }
 
   // ------------------------------------------------------------------------
