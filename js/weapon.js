@@ -1,7 +1,7 @@
 class weapon{
   constructor(weapon, damage){
-    this.weapon = weapon;
-    this.damage = damage;
+    this._weapon = weapon;
+    this._damage = damage;
     this.element = this.createView();
   }
 
@@ -9,4 +9,13 @@ class weapon{
     let elem = $('<div>').attr('class', 'weapon').text(this.weapon);
     return elem
   }
+
+  get weapon(){
+    return this._weapon;
+  }
+
+  get damage(){
+    return this._damage;
+  }
+
 }

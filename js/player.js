@@ -2,8 +2,10 @@ class Player{
   constructor(name, boolean){
     this._name = name;
     this._active = boolean;
-    this.life = 100;
-    this.weapon = 'default';
+    this._life = 100;
+    this._damage = 10;
+    this._weapon = 'default';
+    this._defend = false;
     this.elem = this.createView()
   }
 
@@ -19,5 +21,29 @@ class Player{
 
   set active(boolean){
     this._active = boolean;
+  }
+
+  set weapon(string){
+    this._weapon = string;
+  }
+
+  set damage(number){
+    this._damage = number;
+  }
+
+  get defend(){
+    return this._defend;
+  }
+
+  set defend(boolean){
+    this._defend = boolean;
+  }
+
+  get life(){
+    return this._life;
+  }
+
+  set life(number){
+    this._life = number;
   }
 }

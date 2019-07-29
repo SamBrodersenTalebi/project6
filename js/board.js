@@ -1,3 +1,7 @@
+import { Player } from './player.js'
+import { Weapon } from './weapon.js'
+import { Square } from './square.js'
+
 class Board{
   constructor(size){
     this.size = size;
@@ -133,10 +137,12 @@ class Board{
     this.highlight(validSquares);
     //Listen for click event on the highlighted squares
     $('.highlight').click(function(e){
-      let xPosition = e.pageX;
+      /*let xPosition = e.pageX;
       let yPosition = e.pageY;
       // retrieve elem from coordinates
       let elem = document.elementFromPoint(xPosition, yPosition);
+      */
+      let elem = e.target;
       //access id of elem
       let id = $(elem).attr('id');
       //get the row and column number
@@ -252,10 +258,69 @@ class Board{
     // insert player to the new square
     square.setPlayer(player);
     //If a player passes through a weapon it needs to update the weapon of the player
+    if(square.weapon !== null){
+      //square.weapon accesses the weapon object
+      let weaponObject = square.weapon;
+      //updates the players weapon
+      player.weapon = weaponObject.weapon;
+      //updates the damage that a player deflicts
+      player.damage = weaponObject.damage;
+      //remove weapon from square
+      square.removeWeapon();
+    }
+    // ------------------------------------------------------------------------
+    // FIGHT PART THREE
+    // ------------------------------------------------------------------------
+    //Get id of the current box
+    let fight = false;
+    let id = square.id;
+    let row = Number( id[0]);
+    let column = Number( id[2] );
+    let adjacentSquares = [];
+    adjacentSquares.push(getSquare(row + 1, column));
+    adjacentSquares.push(getSquare(row - 1, column));
+    adjacentSquares.push(getSquare(row, column + 1));
+    adjacentSquares.push(getSquare(row, column - 1));
+    //Loop over the adjacentSquares to see if there is a player;
+    for(i=0; i < adjacentSquares.length; i++){
+      if(adjacentSquares[i].player !== null){
+        fight = true;
+        break;
+      }
+    }
+    if(fight){
+      fight()
+    }
+
   }
 
-  // ------------------------------------------------------------------------
-  // FIGHT PART THREE
-  // ------------------------------------------------------------------------
+  fight(){
+    while(this.players[0].life > 0 || this.players[1].life > 0){
+      //Select active player
+      let activePlayer;
+      let inactivePlayer;
+      for(i=0; i <this.players.length; i++){
+        if(this.players[i].active = true){
+          activePlayer = this.players[i];
+        } else{
+          inactivePlayer = this.players[i];
+        }
+      }
+      $('#attackButton').click(function(){
+        let damage = activePlayer.damage;
+        activePlayer.defend = false;
+        if(inactivePlayer.defend == true){
+          damage / 2;
+        }
+        inactivePlayer.life -= damage;
+        switchPlayer();
+      })
+
+      $('#defendButton').click(function(){
+        activePlayer.defend = true;
+        switchPlayer();
+      })
+    }
+  }
 
 }
