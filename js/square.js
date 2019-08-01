@@ -17,11 +17,27 @@ export class Square {
     this._blocked = false;
     this._player = null;
     this._weapon = null;
+    this._highlight = false;
   }
 
   // ------------------------------------------------------------------------
   // GETTER AND SETTER
   // ------------------------------------------------------------------------
+
+  get weapon(){
+    return this._weapon;
+  }
+
+  set weapon(object){
+    this._weapon = object;
+
+    let td = $('#'+this.id);
+    if(this._weapon === null){
+      $(td).children()[1].replaceWith('<div>');
+    } else{
+      $(td).children()[1].replaceWith(object.element);
+    }
+  }
 
   // Getter is called when trying to read a property
   get blocked(){
@@ -40,46 +56,36 @@ export class Square {
       $(td).removeClass('blocked');
     }
   }
-/*
-  get weapon(){
-    return this._weapon;
+
+  get highlight(){
+    return this._highlight;
   }
 
-  set weapon(string){
-    //Update Model
-    this._weapon = string;
-    //Update View
-    let td = $('#'+this.id);
-    if(string.length > 0){
-      $(td).addClass('weapon').children()[1].html(string);
-    } else{
-      $(td).removeClass('weapon')children()[1].html('');
+  set highlight(boolean){
+    this._highlight = boolean;
+
+    let td = array[i].id;
+    if(boolean){
+      $('#'+td).addClass('highlight');
+    }else{
+      $('#'+td).removeClass('highlight');
     }
   }
-*/
-  setWeapon(weapon){
-    //Update model
-    this._weapon = weapon;
+
+  get player(){
+    return this._player;
+  }
+
+/*
+  set player(object){
+    //Update Model
+    this._player = p;
 
     //Update View
     let td = $('#'+this.id);
-    $(td).children()[1].replaceWith(weapon.element)
-
+    $(td).children()[0].replaceWith(p.elem);
   }
-
-  removeWeapon(){
-    //Update Model
-    let weapon = this._weapon;
-    this._weapon = null;
-
-    //update View
-    let td = $('#'+this.id);
-    $(td).children()[1].replaceWith('div');
-
-    //If a player moves into a tile with a weapon the instance property of damage needs to be updated
-    //!!!!
-  }
-
+*/
   setPlayer(p){
     //Update model
     this._player = p;
@@ -97,8 +103,9 @@ export class Square {
 
     //update View
     let td = $('#'+this.id);
-    $(td).children()[0].replaceWith('div');
-
+    $(td).children()[0].replaceWith('<div>');
+    return p;
   }
+
 
 }

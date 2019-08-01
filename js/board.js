@@ -1,13 +1,16 @@
 import { Player } from './player.js'
 import { Weapon } from './weapon.js'
 import { Square } from './square.js'
+import { scoreBoard } from './scoreBoard.js'
 
-class Board{
+export class Board{
   constructor(size){
     this.size = size;
-    this.board = this._createModel(); //array that contains all square instances for all cells
-    this.players = this._createPlayers();
+    this.model = this._createModel(); //array that contains all square instances for all cells
+    this.players = this._createPlayers(); // two player objects contained in array
+    this.scoreBoard = new ScoreBoard(this.players);
     this.elem = this._createView(); //html elem
+    this.restart = false;
   }
   // ------------------------------------------------------------------------
   // Model and View methods
@@ -34,7 +37,6 @@ class Board{
     return model;
   }
 
-//NEED TO APPEND TO DIVS TO TD!!!
   _createView(){
     let tableElem = $('<table>');
 
@@ -66,19 +68,19 @@ class Board{
     }
     let location = Square.GetPlayerLocation(player.name);
     //return player from model array
-    return this.board[location.row][location.column]
+    return this.model[location.row][location.column]
 
   }
 
   getRandomSquare(){
     let row = Math.floor(Math.random()*this.size);
     let column = Math.floor(Math.random()*this.size);
-    return this.board[row][column];
+    return this.model[row][column];
   }
 
   //gets a specific square
   getSquare(row, column){
-    return this.board[row][column]
+    return this.model[row][column]
   }
 
   // ------------------------------------------------------------------------
@@ -108,7 +110,8 @@ class Board{
       let randomsquare = this.getRandomSquare();
       // If the randomsquare has an instance property of weapon set to an empty string then run the code
       if(randomsquare.weapon == null && randomsquare.blocked == false){
-        randomsquare.setWeapon(weapons.pop());
+        //calls setter
+        randomsquare.weapon = weapons.pop();
       }
     }
   }
@@ -134,26 +137,25 @@ class Board{
     //store the squares that a player can move into in an array.
     let validSquares = this.findValidSquares(location);
     //add class to the validSquares
-    this.highlight(validSquares);
+    this.highlight(validSquares, true);
     //Listen for click event on the highlighted squares
     $('.highlight').click(function(e){
-      /*let xPosition = e.pageX;
-      let yPosition = e.pageY;
-      // retrieve elem from coordinates
-      let elem = document.elementFromPoint(xPosition, yPosition);
-      */
       let elem = e.target;
       //access id of elem
-      let id = $(elem).attr('id');
+      let id = elem.id;
       //get the row and column number
       let row = Number( id[0]);
       let column = Number( id[2] );
       //pass row and column to move function
       this.move(row,column);
       //remove class highlight to the validsquares
-      this.removeHighlight(validSquares);
+      this.highlight(validSquares, false);
       //switch active player when the turn is done
-      switchPlayer()
+      this.switchPlayer()
+      // UPDATE SCOREBOARD!
+      this.scoreBoard.swictchActivePlayer();
+      this.scoreBoard.updatePlayerLifePoints();
+      this.scoreBoard.updatePlayerWeapon();
     })
   }
 
@@ -162,12 +164,12 @@ class Board{
     let row = location.row;
     let column = location.column;
     //Check Left moves
-    for(i = 0; i < 3; i++){
+    for(i = -1; i >= -3; i--){
       let newRow = row + i;
-      let square = this.getSquare(newRow, column)
-      if (newRow < 1 || newRow > this.size){
+      if (newRow < 0){
         break;
       }
+      let square = this.getSquare(newRow, column)
       if(square.blocked == true || square.player !== null ){
         break;
       }
@@ -176,12 +178,12 @@ class Board{
       }
     }
     //Check right moves
-    for(i = -3; i > 0; i++){
+    for(i = 1; i <= 3; i++){
       let newRow = row + i;
-      let square = this.getSquare(newRow, column)
-      if (newRow < 1 || newRow > this.size){
+      if (newRow > this.size - 1){
         break;
       }
+      let square = this.getSquare(newRow, column)
       if(square.blocked == true || square.player !== null ){
         break;
       }
@@ -190,12 +192,12 @@ class Board{
       }
     }
     //Check down moves
-    for(j = 3; j < 0; j++){
-      let newColumn = column + i;
-      let square = this.getSquare(row, newColumn)
-      if (newColumn < 1 || newColumn > this.size){
+    for(j = 1; j <= 3; j++){
+      let newColumn = column + j;
+      if (newColumn > this.size - 1){
         break;
       }
+      let square = this.getSquare(row, newColumn)
       if(square.blocked == true || square.player !== null ){
         break;
       }
@@ -204,12 +206,12 @@ class Board{
       }
     }
     //Check up moves
-    for(j = -3; j > 0; j++){
-      let newColumn = column + i;
-      let square = this.getSquare(row, newColumn)
-      if (newColumn < 1 || newColumn > this.size){
+    for(j = -1; j >= -3; j--){
+      let newColumn = column + j;
+      if (newColumn < 0){
         break;
       }
+      let square = this.getSquare(row, newColumn)
       if(square.blocked == true || square.player !== null ){
         break;
       }
@@ -220,32 +222,17 @@ class Board{
     return validSquares
   }
 
-  highlight(array){
+  highlight(array, boolean){
     //add class highlight to objects within validSquares array
     for(i = 0; i < array.length; i++){
-      let td = array[i].id;
-      $('#'+td).addClass('highlight');
-    }
-  }
-
-  removeHighlight(array){
-    //add class highlight to objects within validSquares array
-    for(i = 0; i < array.length; i++){
-      let td = array[i].id;
-      $('#'+td).removeClass('highlight');
+      array[i].highlight = boolean;
     }
   }
 
   switchPlayer(){
     // switches the active player
-    if(players[0].active == true){
-      players[0].active = false;
-      players[1].active = true;
-    }
-    if(players[1].active == true){
-      players[1].active = false;
-      players[0].active = true;
-    }
+    players[0].active = ! players[0].active;
+    players[1].active = ! players[1].active;
   }
 
   move(row,column){
@@ -261,26 +248,45 @@ class Board{
     if(square.weapon !== null){
       //square.weapon accesses the weapon object
       let weaponObject = square.weapon;
-      //updates the players weapon
-      player.weapon = weaponObject.weapon;
-      //updates the damage that a player deflicts
-      player.damage = weaponObject.damage;
+      //updates the players weapon by calling the setter
+      player.weapon = weaponObject;
       //remove weapon from square
-      square.removeWeapon();
+      square.weapon = null;
     }
     // ------------------------------------------------------------------------
     // FIGHT PART THREE
     // ------------------------------------------------------------------------
     //Get id of the current box
     let fight = false;
-    let id = square.id;
-    let row = Number( id[0]);
-    let column = Number( id[2] );
     let adjacentSquares = [];
-    adjacentSquares.push(getSquare(row + 1, column));
-    adjacentSquares.push(getSquare(row - 1, column));
-    adjacentSquares.push(getSquare(row, column + 1));
-    adjacentSquares.push(getSquare(row, column - 1));
+    let rowRight = row+1;
+    let rowLeft = row-1;
+    let columnDown = column+1;
+    let columnUp = column -1;
+    if(rowRight > this.size -1){
+      break;
+    } else{
+      adjacentSquares.push(this.getSquare(rowRight, column));
+    }
+
+    if(rowLeft < 0){
+      break;
+    } else{
+      adjacentSquares.push(this.getSquare(rowLeft, column));
+    }
+
+    if(columnDown > this.size -1){
+      break;
+    } else{
+      adjacentSquares.push(this.getSquare(row, columnDown));
+    }
+
+    if(columnUp < 0){
+      break;
+    } else{
+      adjacentSquares.push(this.getSquare(row, columnUp));
+    }
+
     //Loop over the adjacentSquares to see if there is a player;
     for(i=0; i < adjacentSquares.length; i++){
       if(adjacentSquares[i].player !== null){
@@ -289,7 +295,7 @@ class Board{
       }
     }
     if(fight){
-      fight()
+      this.fight()
     }
 
   }
@@ -307,20 +313,40 @@ class Board{
         }
       }
       $('#attackButton').click(function(){
-        let damage = activePlayer.damage;
+        let damage;
+        if(activePlayer.weapon === null){
+          damage = 10;
+        } else{
+          damage = activePlayer.weapon.damage;
+        }
         activePlayer.defend = false;
         if(inactivePlayer.defend == true){
           damage / 2;
         }
         inactivePlayer.life -= damage;
-        switchPlayer();
+        this.switchPlayer();
       })
 
       $('#defendButton').click(function(){
         activePlayer.defend = true;
-        switchPlayer();
+        this.switchPlayer();
       })
+      this.scoreBoard.updatePlayerLifePoints();
     }
+    // save the winner
+    let winner;
+    if(this.players[0].life > 0){
+      winner = this.players[0];
+    } else{
+      winner = this.players[1];
+    }
+    //run winner function
+    let name = winner.name;
+    this.gameOver(name)
   }
 
+  gameOver(name){
+    this.restart = true;
+    alert('The winner of the game is ' + name + '. Congratulations!')
+  }
 }

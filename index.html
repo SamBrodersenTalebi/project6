@@ -11,47 +11,41 @@
     <!-- display board -->
     <button type="button" name="button" id="playGame">Play the game</button>
     <div id="table">
-
+      <!-- app is inserted here -->
     </div>
 
     <!-- Player information -->
-    <div class="display inline">
-      <div class="player-container active" id="player1">
-        <h2>Player 1</h2>
-        <div class="player-info">
-          <h3>Health: <span class="life-value"></span></h3>
-          <h3>Weapon Damage: <span class="weapon-value"></span></h3>
-          <h3>Current weapon: <span class="weapon"></span> </h3>
-        </div>
-        <div class="move">
-          <button type="button" name="button" class="attack">ATTACK</button>
-          <button type="button" name="button">DEFEND</button>
-        </div>
+    <div id="player info">
+      <div>
+        Currently the active player is <span id = 'active'> <span>
       </div>
-
-      <div class="player-container" id="player2">
-        <h2>Player 2</h2>
-        <div class="player-info">
-          <h3>Health: <span class="life-value"></span></h3>
-          <h3>Current weapon: <span class="weapon"></span> </h3>
-          <h3>Weapon Damage: <span class="weapon-value"></span> </h3>
-        </div>
-        <div class="move">
-          <button type="button" name="button" class="attack">ATTACK</button>
-          <button type="button" name="button">DEFEND</button>
-        </div>
+      <div id="name">
+        Player 1 name: <span></span>
+        Player 2 name: <span></span>
+      </div>
+      <div id="weapon">
+        Player 1 weapon: <span></span>
+        Player 2 weapon: <span></span>
+      </div>
+      <div id = "life">
+        Player 1 life: <span></span>
+        Player 2 life: <span></span>
+      </div>
+      <div class="buttons">
+        <button type="button" name="button" id="attackButton">Attack</button>
+        <button type="button" name="button" id="defendButton">Defend</button>
       </div>
     </div>
 
-
-    <div class="inline" id="map">
-
-    </div>
-
-    <br class="clearBoth">
 
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
-    <script type="text/javascript" src="js/map.js">
+    </script>
+    <script type="module">
+    import { App } from '/js/app.js'
+      $('#playGame').click(function(){
+        var app = new App('table',10);
+        $('#playGame').hide();
+      })
     </script>
   </body>
 </html>

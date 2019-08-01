@@ -3,8 +3,7 @@ class Player{
     this._name = name;
     this._active = boolean;
     this._life = 100;
-    this._damage = 10;
-    this._weapon = 'default';
+    this._weapon = null;
     this._defend = false;
     this.elem = this.createView()
   }
@@ -13,6 +12,10 @@ class Player{
     //Create div with an id of player an insert name of player into div
     let elem = $('<div>').attr('id', this._name).attr('class', 'player').text(this._name);
     return elem
+  }
+
+  get name(){
+    return this._name;
   }
 
   get active(){
