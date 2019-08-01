@@ -346,7 +346,7 @@ export class Board{
   }
 
   gameOver(name){
-    this.restart = true;
     alert('The winner of the game is ' + name + '. Congratulations!')
+    $('#restart').show();
   }
 }

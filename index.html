@@ -37,14 +37,26 @@
       </div>
     </div>
 
+    <div id="restart">
+      <button type="button" name="button" id="restartGame">Restart Game</button>
+    </div>
+
 
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     </script>
     <script type="module">
     import { App } from '/js/app.js'
+      let app;
       $('#playGame').click(function(){
-        var app = new App('table',10);
+        app = new App('table',10);
         $('#playGame').hide();
+      })
+
+      $('#restartGame').click(function(){
+        //NEED TO DELETE THE INSTANCE OF THE CLASS APP
+        delete app
+        $('#restart').hide();
+        $('#playGame').show();
       })
     </script>
   </body>
