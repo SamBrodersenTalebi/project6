@@ -1,4 +1,4 @@
-import { Player } from './player.js'
+import { Player } from 'C:\Users\samta\Documents\OpenClassrooms\Project 6\js\player.js'
 
 export class ScoreInfo{
   constructor(players){

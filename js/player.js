@@ -1,4 +1,4 @@
-import { Weapon } from './weapon.js'
+import { Weapon } from 'C:\Users\samta\Documents\OpenClassrooms\Project 6\js\weapon.js'
 
 class Player{
   constructor(name, boolean){
