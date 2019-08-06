@@ -1,16 +1,15 @@
-import { Player } from './player.js'
-import { Weapon } from './weapon.js'
-import { Square } from './square.js'
-import { scoreBoard } from './scoreBoard.js'
+import { Player } from 'C:\Users\samta\Documents\OpenClassrooms\Project 6\js\player.js'
+import { Weapon } from 'C:\Users\samta\Documents\OpenClassrooms\Project 6\js\weapon.js'
+import { Square } from 'C:\Users\samta\Documents\OpenClassrooms\Project 6\js\square.js'
+import { ScoreInfo } from 'C:\Users\samta\Documents\OpenClassrooms\Project 6\js\scoreinfo.js'
 
 export class Board{
   constructor(size){
     this.size = size;
     this.model = this._createModel(); //array that contains all square instances for all cells
-    this.players = this._createPlayers(); // two player objects contained in array
-    this.scoreBoard = new ScoreBoard(this.players);
+    //this.players = this._createPlayers(); // two player objects contained in array
+    //this.scoreBoard = new ScoreInfo(this.players);
     this.elem = this._createView(); //html elem
-    this.restart = false;
   }
   // ------------------------------------------------------------------------
   // Model and View methods
@@ -157,6 +156,7 @@ export class Board{
       this.scoreBoard.updatePlayerLifePoints();
       this.scoreBoard.updatePlayerWeapon();
     })
+    this.movePlayer();
   }
 
   findValidSquares(location){
@@ -248,10 +248,12 @@ export class Board{
     if(square.weapon !== null){
       //square.weapon accesses the weapon object
       let weaponObject = square.weapon;
+      // get the players weapon
+      let lostWeapon = player.weapon;
       //updates the players weapon by calling the setter
       player.weapon = weaponObject;
-      //remove weapon from square
-      square.weapon = null;
+      //replace weapon from square
+      square.weapon = lostWeapon;
     }
     // ------------------------------------------------------------------------
     // FIGHT PART THREE
@@ -294,15 +296,14 @@ export class Board{
         break;
       }
     }
-    if(fight){
-      this.fight()
-    }
 
+    if(fight){
+      this.initFight()
+    }
   }
 
-  fight(){
-    while(this.players[0].life > 0 || this.players[1].life > 0){
-      //Select active player
+    initFight(){
+      //Select the active player
       let activePlayer;
       let inactivePlayer;
       for(i=0; i <this.players.length; i++){
@@ -312,41 +313,50 @@ export class Board{
           inactivePlayer = this.players[i];
         }
       }
-      $('#attackButton').click(function(){
-        let damage;
-        if(activePlayer.weapon === null){
-          damage = 10;
-        } else{
-          damage = activePlayer.weapon.damage;
+
+      //Listen for click event on the two buttons
+      $("#attackButton", "#defendButton").click(function(){
+        if (this.id == 'attackButton'){
+          attack(activePlayer, inactivePlayer);
+        }else if (this.id == 'defendButton'){
+          defend(activePlayer);
         }
-        activePlayer.defend = false;
+      })
+    }
+
+      attack(activePlayer, inactivePlayer){
+        let damage = activePlayer.weapon.damage;
+
         if(inactivePlayer.defend == true){
           damage / 2;
         }
-        inactivePlayer.life -= damage;
-        this.switchPlayer();
-      })
+        inactivePlayer.life -= damage
+        this.scoreBoard.updatePlayerLifePoints();
 
-      $('#defendButton').click(function(){
+        if(inactivePlayer.defend == true){
+          inactivePlayer.defend = false;
+        }
+
+        if(inactivePlayer.life <= 0){
+          this.gameOver(activePlayer);
+        } else{
+          this.switchPlayer();
+          this.scoreBoard.switchActivePlayer();
+          this.initFight();
+        }
+      }
+
+      defend(activePlayer){
         activePlayer.defend = true;
-        this.switchPlayer();
-      })
-      this.scoreBoard.updatePlayerLifePoints();
-    }
-    // save the winner
-    let winner;
-    if(this.players[0].life > 0){
-      winner = this.players[0];
-    } else{
-      winner = this.players[1];
-    }
-    //run winner function
-    let name = winner.name;
-    this.gameOver(name)
-  }
 
-  gameOver(name){
-    alert('The winner of the game is ' + name + '. Congratulations!')
-    $('#restart').show();
+        this.switchPlayer();
+        this.scoreBoard.switchActivePlayer();
+        this.initFight();
+      }
+
+      gameOver(activePlayer){
+        alert('The winner of the game is ' + activePlayer.name + '. Congratulations!')
+      }
+
+
   }
-}

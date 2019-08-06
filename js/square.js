@@ -1,5 +1,5 @@
-import { Player } from './player.js'
-import { Weapon } from './weapon.js'
+import { Player } from 'C:\Users\samta\Documents\OpenClassrooms\Project 6\js\player.js'
+import { Weapon } from 'C:\Users\samta\Documents\OpenClassrooms\Project 6\js\weapon.js'
 
 export class Square {
   static GetPlayerLocation(name){

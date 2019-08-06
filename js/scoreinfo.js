@@ -1,6 +1,6 @@
 import { Player } from './player.js'
 
-class scoreBoard{
+export class ScoreInfo{
   constructor(players){
     this.players = players;
     this.name();
@@ -14,7 +14,7 @@ class scoreBoard{
     $('#name').children()[1].text(this.players[1].name);
   }
 
-  swictchActivePlayer(){
+  switchActivePlayer(){
     if(this.players[0].active === true){
       $('#active').text(this.players[0].name)
     } else{

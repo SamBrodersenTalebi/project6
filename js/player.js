@@ -1,9 +1,11 @@
+import { Weapon } from './weapon.js'
+
 class Player{
   constructor(name, boolean){
     this._name = name;
     this._active = boolean;
     this._life = 100;
-    this._weapon = null;
+    this._weapon = new Weapon('Stick', 10);
     this._defend = false;
     this.elem = this.createView()
   }

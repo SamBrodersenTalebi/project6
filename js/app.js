@@ -1,4 +1,4 @@
-import { Board } from './js/Board.js'
+import { Board } from 'C:\Users\samta\Documents\OpenClassrooms\Project 6\js\board.js'
 
 class App{
   constructor(divID, boardSize){
@@ -14,7 +14,7 @@ class App{
     this.board = new Board(boardSize);
 
     // Create  app <div> and append board element
-    this.elem = $('<div>'). attr('id', 'board-app').append(this.board.elem);
+    this.elem = $('<div>').attr('id', 'board-app').append(this.board.elem);
 
     //append app <div> to the div inside of the html document
     $('#'+divId).append(this.elem);
